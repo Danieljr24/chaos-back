@@ -31,6 +31,7 @@ public class AuthController {
 
     @GetMapping("/has-role")
     public ResponseEntity<Map<String, Boolean>> hasRole(
+        
             @RequestParam String username,
             @RequestParam String microservice
     ) {
