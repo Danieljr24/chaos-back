@@ -18,10 +18,8 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        String secret = System.getenv("JWT_SECRET");
-        if (secret == null) {
-            throw new IllegalStateException("La variable de entorno JWT_SECRET no está configurada");
-        }
+        // Clave fija para pruebas (mínimo 32 bytes para HS256)
+        String secret = "clave-secreta-super-larga-para-pruebas-jwt-1234567890";
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 

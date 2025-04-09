@@ -1,5 +1,6 @@
 package com.example.olimpo_service.controller;
 
+import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
@@ -29,12 +29,17 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        authService.register(request);
+        return ResponseEntity.ok("Usuario registrado exitosamente");
+    }
+
     @GetMapping("/has-role")
     public ResponseEntity<Map<String, Boolean>> hasRole(
-        
+
             @RequestParam String username,
-            @RequestParam String microservice
-    ) {
+            @RequestParam String microservice) {
         boolean hasRole = authService.hasRoleInMicroservice(username, microservice);
         return ResponseEntity.ok(Map.of("hasRole", hasRole));
     }
