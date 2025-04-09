@@ -7,8 +7,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -20,22 +18,25 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        byte[] secretBytes = new byte[64]; // 512 bits = seguro para HMAC-SHA-512
-        new SecureRandom().nextBytes(secretBytes);
-        this.key = Keys.hmacShaKeyFor(secretBytes);
-
-        String encodedKey = Base64.getEncoder().encodeToString(secretBytes);
-        System.out.println("🔐 Clave secreta generada dinámicamente (solo para pruebas): " + encodedKey);
+        String secret = System.getenv("JWT_SECRET");
+        if (secret == null) {
+            throw new IllegalStateException("La variable de entorno JWT_SECRET no está configurada");
+        }
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(String username, Map<String, Object> rolesByMicroservice) {
-        return Jwts.builder()
-                .setSubject(username)
-                .addClaims(rolesByMicroservice)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(key)
-                .compact();
+        try {
+            return Jwts.builder()
+                    .setSubject(username)
+                    .addClaims(rolesByMicroservice)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                    .signWith(key)
+                    .compact();
+        } catch (JwtException e) {
+            throw new IllegalArgumentException("Error al generar el token", e);
+        }
     }
 
     public String extractUsername(String token) {
