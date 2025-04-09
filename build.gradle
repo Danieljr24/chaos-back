@@ -24,7 +24,7 @@ dependencies {
 	// Seguridad
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// JPA y H2
+	// JPA y bases de datos
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'mysql:mysql-connector-java:8.0.33'
@@ -38,22 +38,27 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// GraphQL (Spring Boot 3+ compatible)
-	implementation 'org.springframework.boot:spring-boot-starter-graphql'
-	implementation 'com.graphql-java:graphql-java-extended-scalars:20.1'
-    implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:11.1.0'
+	// GraphQL (con soporte para resolvers tipo GraphQLQueryResolver, etc.)
+	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.0.0'
+	implementation 'com.graphql-java-kickstart:graphql-java-tools:11.1.0'
 
+	// GraphiQL IDE para pruebas (opcional en desarrollo)
+	implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:11.1.0'
 
-	// GraphiQL IDE opcional para probar
-	implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
-
-	// DevTools (opcional para desarrollo en caliente)
+	// DevTools (hot reload en desarrollo)
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Para evitar conflictos con anotaciones
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 tasks.named('test') {

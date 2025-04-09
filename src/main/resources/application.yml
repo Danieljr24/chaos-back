@@ -16,5 +16,14 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+  graphql:
+    servlet:
+      mapping: /graphql
+      enabled: true
+    graphiql:
+      enabled: true
+      endpoint: /graphql
+      path: /graphiql
+
 server:
   port: 8081
