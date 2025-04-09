@@ -4,22 +4,23 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@ToString(exclude = "user")
+@EqualsAndHashCode(exclude = "user")
 public class UserRole {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String microservice;
-
     private String role;
 
     @ManyToOne
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "user_username")
     private User user;
-    
 }

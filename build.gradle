@@ -21,6 +21,8 @@ dependencies {
 	// Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	implementation 'mysql:mysql-connector-java:8.0.33'
+
 	// Seguridad
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
