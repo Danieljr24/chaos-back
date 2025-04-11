@@ -1,11 +1,13 @@
 package com.example.olimpo_service.controller;
 
+import com.example.olimpo_service.dto.LoginRequest;
+import com.example.olimpo_service.dto.LoginResponse;
 import com.example.olimpo_service.service.AuthService;
+import com.example.olimpo_service.util.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -14,36 +16,30 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request,
+                                                HttpServletResponse response) {
+        // Delegar login al AuthService
+        LoginResponse loginResponse = authService.login(request);
 
-        String token = authService.authenticate(username, password);
+        // Establecer JWT como cookie segura
+        CookieUtil.addJwtCookie(response, loginResponse.getJwt());
 
-        if (username == null || password == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Username y password son obligatorios"));
-        }
+        // También podrías agregar el ticket como header si lo deseas en el cliente
+        response.setHeader("Ticket", loginResponse.getTicket());
 
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(loginResponse);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        authService.register(request);
-        return ResponseEntity.ok("Usuario registrado exitosamente");
-    }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Ticket") String ticket,
+                                            HttpServletResponse response) {
+        // Invalida el ticket
+        authService.logout(ticket);
 
-    @GetMapping("/has-role")
-    public ResponseEntity<Map<String, Boolean>> hasRole(
+        // Borra cookie JWT
+        CookieUtil.clearJwtCookie(response);
 
-            @RequestParam String username,
-            @RequestParam String microservice) {
-        boolean hasRole = authService.hasRoleInMicroservice(username, microservice);
-        return ResponseEntity.ok(Map.of("hasRole", hasRole));
+        return ResponseEntity.ok("Sesión cerrada correctamente.");
     }
 }

@@ -3,25 +3,25 @@ package com.example.olimpo_service.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "user")
-@EqualsAndHashCode(exclude = "user")
-public class UserRole {
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String microservice;
-    private String role;
+    private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "user_username")
-    private User user;
+    private LocalDateTime issuedAt;
 
+    private LocalDateTime lastUsedAt;
+
+    private boolean active;
 }
