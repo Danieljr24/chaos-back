@@ -1,4 +1,4 @@
-package com.example.olimpo_service.model;
+package com.example.olimpo_service.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,4 +23,8 @@ public class UserRole {
     @ManyToOne
     @JoinColumn(name = "user_username")
     private User user;
+
+    public static Object getMicroservice(Object o) {
+        return null;
+    }
 }

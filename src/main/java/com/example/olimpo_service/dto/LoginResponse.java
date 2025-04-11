@@ -1,4 +1,4 @@
 package com.example.olimpo_service.dto;
 
-public class RegisterRequest {
+public class LoginResponse {
 }

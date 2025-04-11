@@ -1,6 +1,6 @@
 package com.example.olimpo_service.repository;
 
-import com.example.olimpo_service.model.UserRole;
+import com.example.olimpo_service.entities.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

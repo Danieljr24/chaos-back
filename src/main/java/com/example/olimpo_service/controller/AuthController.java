@@ -1,6 +1,5 @@
 package com.example.olimpo_service.controller;
 
-import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,10 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
