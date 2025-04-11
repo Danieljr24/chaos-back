@@ -2,6 +2,7 @@ package com.example.olimpo_service.service;
 
 import com.example.olimpo_service.dto.LoginRequest;
 import com.example.olimpo_service.dto.LoginResponse;
+import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.entities.User;
 import com.example.olimpo_service.entities.UserRole;
 import com.example.olimpo_service.repository.TicketRepository;
@@ -29,16 +30,13 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
-        // 1. Buscar usuario
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2. Validar contraseña
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Credenciales inválidas");
         }
 
-        // 3. Obtener roles
         List<UserRole> roles = userRoleRepository.findByUser(user);
         Map<String, String> roleMap = roles.stream()
                 .collect(Collectors.toMap(
@@ -46,18 +44,37 @@ public class AuthService {
                         UserRole::getRole
                 ));
 
-        // 4. Generar JWT con roles por microservicio
         String jwt = jwtUtil.generateToken(user.getUsername(), roleMap);
-
-        // 5. Generar y guardar ticket
         String ticket = UUID.randomUUID().toString();
         ticketRepository.saveTicket(user.getUsername(), ticket, Instant.now());
 
-        // 6. Retornar JWT + Ticket
         return new LoginResponse(jwt, ticket);
     }
 
     public void logout(String ticket) {
         ticketRepository.invalidateTicket(ticket);
+    }
+
+    @Transactional
+    public void register(RegisterRequest request) {
+        // Verificar si el usuario ya existe
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("El usuario ya existe");
+        }
+
+        // Crear nuevo usuario
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        // Crear roles por microservicio
+        for (Map.Entry<String, String> entry : request.getRoles().entrySet()) {
+            UserRole userRole = new UserRole();
+            userRole.setUser(user);
+            userRole.setMicroservice(entry.getKey());
+            userRole.setRole(entry.getValue());
+            userRoleRepository.save(userRole);
+        }
     }
 }

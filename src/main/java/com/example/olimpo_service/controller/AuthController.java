@@ -2,6 +2,7 @@ package com.example.olimpo_service.controller;
 
 import com.example.olimpo_service.dto.LoginRequest;
 import com.example.olimpo_service.dto.LoginResponse;
+import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.service.AuthService;
 import com.example.olimpo_service.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,16 +17,20 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        authService.register(request);
+        return ResponseEntity.ok("Usuario registrado correctamente.");
+    }
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request,
-                                                HttpServletResponse response) {
-        // Delegar login al AuthService
+            HttpServletResponse response) {
+
         LoginResponse loginResponse = authService.login(request);
 
-        // Establecer JWT como cookie segura
         CookieUtil.addJwtCookie(response, loginResponse.getJwt());
 
-        // También podrías agregar el ticket como header si lo deseas en el cliente
         response.setHeader("Ticket", loginResponse.getTicket());
 
         return ResponseEntity.ok(loginResponse);
@@ -33,11 +38,10 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Ticket") String ticket,
-                                            HttpServletResponse response) {
-        // Invalida el ticket
+            HttpServletResponse response) {
+
         authService.logout(ticket);
 
-        // Borra cookie JWT
         CookieUtil.clearJwtCookie(response);
 
         return ResponseEntity.ok("Sesión cerrada correctamente.");
