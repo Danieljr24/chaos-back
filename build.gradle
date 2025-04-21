@@ -18,18 +18,18 @@ repositories {
 }
 
 dependencies {
-	// Web
+	// Spring Boot Web y Seguridad
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// Seguridad
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-graphql:3.4.4'
 
-	// JPA y bases de datos
+	// Spring Boot JPA + Base de datos
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2' // Solo para pruebas, reemplaza si usas MySQL en prod
 	implementation 'mysql:mysql-connector-java:8.0.33'
 
-	// JWT
+	// JSON Web Tokens (JWT)
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -38,14 +38,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// GraphQL (con soporte para resolvers tipo GraphQLQueryResolver, etc.)
-	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.0.0'
-	implementation 'com.graphql-java-kickstart:graphql-java-tools:11.1.0'
 
-	// GraphiQL IDE para pruebas (opcional en desarrollo)
-	implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:11.1.0'
-
-	// DevTools (hot reload en desarrollo)
+	// Desarrollo
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// Test
@@ -54,7 +48,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-// Para evitar conflictos con anotaciones
+// Para que compileOnly herede annotationProcessor (necesario para Lombok)
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

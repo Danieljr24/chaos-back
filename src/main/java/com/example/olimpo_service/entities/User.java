@@ -1,23 +1,22 @@
 package com.example.olimpo_service.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
-import java.util.List;
+import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class User {
 
     @Id
-    private String username;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    private String username;
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserRole> roles;
-
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Set<UserRole> roles;
 }

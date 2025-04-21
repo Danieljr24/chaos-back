@@ -1,27 +1,20 @@
 package com.example.olimpo_service.entities;
 
+import lombok.Data;
+
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@ToString(exclude = "user")
-@EqualsAndHashCode(exclude = "user")
+@Data
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String microservice;
-    private String role;
+    private String roleName;
 
     @ManyToOne
-    @JoinColumn(name = "user_username")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }
