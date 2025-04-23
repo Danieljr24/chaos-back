@@ -1,7 +1,6 @@
 package com.example.olimpo_service.entities;
 
 import lombok.Data;
-
 import jakarta.persistence.*;
 
 @Entity

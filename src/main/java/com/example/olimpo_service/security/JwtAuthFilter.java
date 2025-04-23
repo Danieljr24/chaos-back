@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.IOException;
+import java.security.Security;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -33,16 +34,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getTokenFromCookie(request);
+            System.out.println("JWT desde la cookie: " + jwt);
             if (jwt == null) {
-                jwt = getTokenFromHeader(request); // Añadido para validar el header
+                jwt = getTokenFromHeader(request);
             }
+            System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
-            if (jwt != null && jwtUtil.isTokenValid(jwt, jwtUtil.extractUsername(jwt))) {
-                var username = jwtUtil.extractUsername(jwt);
-                var userDetails = userDetailsService.loadUserByUsername(username);
-                var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(auth);
+            if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                String username = jwtUtil.extractUsername(jwt);
+                System.out.println(jwtUtil.isTokenValid(jwt, username));
+                if (username != null && jwtUtil.isTokenValid(jwt, username) == true) {
+                    var userDetails = userDetailsService.loadUserByUsername(username);
+                    var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
         } catch (Exception e) {
             logger.error("No se pudo establecer autenticación", e);
@@ -62,13 +68,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return null;
     }
 
-    // Método agregado para extraer el token del header
     private String getTokenFromHeader(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);  // Eliminar "Bearer " del encabezado
+            return authHeader.substring(7);
         }
         return null;
     }
 }
-

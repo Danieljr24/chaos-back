@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -17,17 +18,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        User user = userRepository.findByUsernameWithRoles(username)
+        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        // Puedes configurar roles aquí o usar un UserDetails customizado
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities(user.getRoles().stream()
-                        .map(role -> role.getRoleName())
-                        .map(roleName -> "ROLE_" + roleName)
+                        .map(role -> "ROLE_" + role.getRoleName())
                         .toArray(String[]::new))
                 .build();
     }

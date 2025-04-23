@@ -25,5 +25,9 @@ spring:
       endpoint: /graphql
       path: /graphiql
 
+  jwt:
+    secret: 22341327198458621538721376214215432164821
+
+
 server:
   port: 8081

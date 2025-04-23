@@ -3,8 +3,12 @@ package com.example.olimpo_service.controller;
 import com.example.olimpo_service.dto.LoginRequest;
 import com.example.olimpo_service.dto.RegisterRequest;
 import com.example.olimpo_service.service.AuthService;
+import com.example.olimpo_service.util.JwtUtil;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request, HttpServletResponse response) {
@@ -25,4 +31,13 @@ public class AuthController {
     public String register(@RequestBody RegisterRequest request) {
         return authService.register(request);
     }
+
+    @GetMapping("/user/profile")
+    public ResponseEntity<?> getProfile(@RequestHeader("Token") String token) {
+
+        String username = jwtUtil.extractUsername(token);
+        System.out.println("Username: " + username);
+        return ResponseEntity.ok("Bienvenido " + username);
+    }
+
 }
