@@ -16,7 +16,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.stream.Collectors;
-import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
