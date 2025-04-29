@@ -1,4 +1,4 @@
-package com.example.chaos_back.util;
+package com.example.chaosback.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

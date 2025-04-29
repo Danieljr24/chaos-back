@@ -1,4 +1,4 @@
-package com.example.chaos_back.security;
+package com.example.chaosback.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

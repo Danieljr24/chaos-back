@@ -1,9 +1,9 @@
-package com.example.chaos_back.repository;
+package com.example.chaosback.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.chaos_back.entity.Role;
-import com.example.chaos_back.entity.User;
+import com.example.chaosback.entity.Role;
+import com.example.chaosback.entity.User;
 
 import java.util.List;
 import java.util.Optional;
