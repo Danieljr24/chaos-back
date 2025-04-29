@@ -1,14 +1,15 @@
-package com.example.olimpo_service.data;
+package com.example.chaosback.data;
 
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.entities.UserRole;
-import com.example.olimpo_service.repository.UserRepository;
-import com.example.olimpo_service.repository.UserRoleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.example.chaosback.entity.Role;
+import com.example.chaosback.entity.User;
+import com.example.chaosback.repository.RoleRepository;
+import com.example.chaosback.repository.UserRepository;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class DataInitializer implements CommandLineRunner {
     private UserRepository userRepository;
 
     @Autowired
-    private UserRoleRepository userRoleRepository;
+    private RoleRepository userRoleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder; // 🔒 Para cifrar contraseñas
@@ -47,7 +48,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createRole(User user, String roleName) {
-        UserRole userRole = new UserRole();
+        Role userRole = new Role();
         userRole.setRoleName(roleName);
         userRole.setUser(user);
 

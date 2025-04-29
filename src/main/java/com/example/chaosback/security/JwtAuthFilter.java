@@ -1,6 +1,5 @@
-package com.example.olimpo_service.security;
+package com.example.chaosback.security;
 
-import com.example.olimpo_service.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,10 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.example.chaosback.util.JwtUtil;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.IOException;
-import java.security.Security;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {

@@ -1,15 +1,15 @@
-package com.example.olimpo_service.controller;
-
-import com.example.olimpo_service.dto.LoginRequest;
-import com.example.olimpo_service.dto.RegisterRequest;
-import com.example.olimpo_service.service.AuthService;
-import com.example.olimpo_service.util.JwtUtil;
+package com.example.chaosback.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.chaosback.dto.LoginRequest;
+import com.example.chaosback.dto.RegisterRequest;
+import com.example.chaosback.service.AuthService;
+import com.example.chaosback.util.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")

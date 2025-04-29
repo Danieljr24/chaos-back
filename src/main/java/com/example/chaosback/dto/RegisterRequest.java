@@ -1,4 +1,4 @@
-package com.example.olimpo_service.dto;
+package com.example.chaos_back.dto;
 
 import lombok.Data;
 

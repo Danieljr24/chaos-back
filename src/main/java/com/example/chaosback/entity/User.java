@@ -1,4 +1,4 @@
-package com.example.olimpo_service.entities;
+package com.example.chaosback.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
@@ -17,5 +17,5 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<UserRole> roles;
+    private List<Role> roles;
 }

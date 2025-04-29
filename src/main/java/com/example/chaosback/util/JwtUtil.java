@@ -1,4 +1,4 @@
-package com.example.olimpo_service.util;
+package com.example.chaos_back.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

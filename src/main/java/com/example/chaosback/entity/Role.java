@@ -1,11 +1,11 @@
-package com.example.olimpo_service.entities;
+package com.example.chaosback.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
 
 @Entity
 @Data
-public class UserRole {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,16 +1,17 @@
-package com.example.olimpo_service.service;
+package com.example.chaosback.service;
 
-import com.example.olimpo_service.dto.LoginRequest;
-import com.example.olimpo_service.dto.RegisterRequest;
-import com.example.olimpo_service.entities.User;
-import com.example.olimpo_service.entities.UserRole;
-import com.example.olimpo_service.repository.UserRepository;
-import com.example.olimpo_service.repository.UserRoleRepository;
-import com.example.olimpo_service.util.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.chaosback.dto.LoginRequest;
+import com.example.chaosback.dto.RegisterRequest;
+import com.example.chaosback.entity.Role;
+import com.example.chaosback.entity.User;
+import com.example.chaosback.repository.RoleRepository;
+import com.example.chaosback.repository.UserRepository;
+import com.example.chaosback.util.JwtUtil;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,12 +22,12 @@ import java.util.stream.Collectors;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final RoleRepository userRoleRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
 
-    public AuthService(UserRepository userRepository, UserRoleRepository userRoleRepository, JwtUtil jwtUtil,
+    public AuthService(UserRepository userRepository, RoleRepository userRoleRepository, JwtUtil jwtUtil,
             PasswordEncoder passwordEncoder, AuthenticationManager authManager) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
@@ -60,7 +61,7 @@ public class AuthService {
             userRepository.save(user);
         
             // Crear y asociar roles
-            UserRole role = new UserRole();
+            Role role = new Role();
             role.setRoleName("USER");
             role.setUser(user);
         
